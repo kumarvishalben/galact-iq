@@ -1,5 +1,7 @@
 # GalactIQ - Unlocking the Universe, One Question at a Time
 
+![GalactIQ Poster](poster.png)
+
 Welcome to GalactIQ, an AI-powered space education platform designed for researchers, educators, and students. Our platform leverages the power of multi-agent AI systems through crewAI to provide personalized space-related information based on user personas.
 
 ## 🚀 Live Demo
