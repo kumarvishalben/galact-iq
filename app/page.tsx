@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Send, GraduationCap, Microscope, Glasses } from "lucide-react"
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
+import ReactMarkdown from "react-markdown"
 
 
 
@@ -89,12 +90,87 @@ function ChatSection() {
   const [messages, setMessages] = useState<Array<{ type: string; content: string }>>([])
   const [selectedPersona, setSelectedPersona] = useState<string | null>("researcher")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (input.trim()) {
       setMessages([...messages, { type: "user", content: input }])
-      // Here you would typically send the input to your backend
-      // and then add the response to the messages
+
+      try {
+        const response = await fetch('http://localhost:8000/run-crew', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            space_query: input,
+            role: selectedPersona,
+            category: "space mission",
+            topic: "Space",
+            research_response: ""
+          }),
+        })
+
+        const data = await response.json()
+
+        if (data.status === "success") {
+          // Find the most relevant response based on the selected persona
+          let relevantResponse = ""
+
+          if (data.result.tasks_output) {
+            // Find response from the agent matching the selected persona
+            const agentMap = {
+              researcher: ["Research Papers Agent", "Space Mission Agent"],
+              educator: ["Space Mission Agent", "Satellite Data Agent"],
+              student: ["Celestial Events Agent", "Space Mission Agent"]
+            }
+
+            const relevantAgents = agentMap[selectedPersona as keyof typeof agentMap] || []
+
+            // Find the first non-empty response from relevant agents
+            for (const agent of relevantAgents) {
+              const agentResponse = data.result.tasks_output.find(
+                task => task.agent?.trim() === agent && task.raw && !task.raw.includes("We apologize")
+              )
+              if (agentResponse?.raw) {
+                relevantResponse = agentResponse.raw.replace(/```/g, '').trim()
+                break
+              }
+            }
+
+            // If no relevant agent response found, use the first non-empty response
+            if (!relevantResponse) {
+              const firstValidResponse = data.result.tasks_output.find(
+                task => task.raw && !task.raw.includes("We apologize") && !task.raw.includes("successfully posted to the Slack")
+              )
+              relevantResponse = firstValidResponse?.raw.replace(/```/g, '').trim() || ""
+            }
+          }
+
+          // If no relevant response found in tasks_output, use the raw response
+          if (!relevantResponse && data.result.raw) {
+            relevantResponse = data.result.raw.replace(/```/g, '').trim()
+          }
+
+          // If still no relevant response, show an apologetic message
+          if (!relevantResponse || relevantResponse.includes("successfully posted to the Slack")) {
+            relevantResponse = "I apologize, but I don't have enough information to answer your question at the moment. Please try asking a more specific question about space missions, celestial events, or research papers."
+          }
+
+          setMessages(prev => [...prev, { type: "assistant", content: relevantResponse }])
+        } else {
+          setMessages(prev => [...prev, {
+            type: "assistant",
+            content: "I apologize, but I couldn't process your request at the moment. Please try again later."
+          }])
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        setMessages(prev => [...prev, {
+          type: "assistant",
+          content: "I apologize, but there was an error processing your request. Please try again later."
+        }])
+      }
+
       setInput("")
     }
   }
@@ -145,7 +221,15 @@ function ChatSection() {
                     : "bg-slate-700/50 border border-slate-600/30 max-w-[80%]"
                     }`}
                 >
-                  {message.content}
+                  {message.type === "user" ? (
+                    message.content
+                  ) : (
+                    <ReactMarkdown
+                      className="prose prose-invert max-w-none prose-headings:text-blue-400 prose-a:text-blue-400 hover:prose-a:text-blue-300"
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  )}
                 </div>
               ))
             )}
