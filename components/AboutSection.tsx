@@ -1,3 +1,6 @@
+import { ExternalLinkIcon } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 export const AboutSection = () => (
     <div className="mt-16">
         <div id="about" className="mb-12 bg-slate-800/30 rounded-xl p-6 border border-slate-700">
@@ -5,6 +8,7 @@ export const AboutSection = () => (
             <div className="space-y-6">
                 <div>
                     <h3 className="text-xl font-semibold mb-2 text-slate-200">Overview</h3>
+                    <div className="border-b border-slate-700 mb-4"></div>
                     <p className="text-slate-300">
                         GalacticIQ is a conversational AI chatbot for space data, developed by Team SpaceZ. Our platform provides quick, reliable answers to space-related queries, making space data more accessible to researchers, educators, and the general public.
                     </p>
@@ -12,6 +16,7 @@ export const AboutSection = () => (
 
                 <div>
                     <h3 className="text-xl font-semibold mb-2 text-slate-200">Use Cases</h3>
+                    <div className="border-b border-slate-700 mb-4"></div>
                     <ul className="list-disc list-inside text-slate-300 space-y-2">
                         <li><span className="font-semibold">Researchers:</span> Access and analyze research papers on topics like dark matter, space missions, and astrophysics</li>
                         <li><span className="font-semibold">Educators:</span> Get simplified explanations and create engaging space-related educational content</li>
@@ -21,6 +26,7 @@ export const AboutSection = () => (
 
                 <div>
                     <h3 className="text-xl font-semibold mb-2 text-slate-200">Key Features</h3>
+                    <div className="border-b border-slate-700 mb-4"></div>
                     <ul className="list-disc list-inside text-slate-300 space-y-2">
                         <li>Natural Language Processing for conversational interactions</li>
                         <li>Easy consumption of space mission details</li>
@@ -31,6 +37,7 @@ export const AboutSection = () => (
 
                 <div>
                     <h3 className="text-xl font-semibold mb-2 text-slate-200">Technical Stack</h3>
+                    <div className="border-b border-slate-700 mb-4"></div>
                     <p className="text-slate-300">
                         Built with Next.js, Python, and powered by ChatGPT and Crew AI framework. Deployed on Vercel and GCP for optimal performance and reliability.
                     </p>
@@ -38,6 +45,7 @@ export const AboutSection = () => (
 
                 <div>
                     <h3 className="text-xl font-semibold mb-2 text-slate-200">Team SpaceZ</h3>
+                    <div className="border-b border-slate-700 mb-4"></div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="text-slate-300 flex flex-col items-center text-center">
                             <div className="w-32 h-32 rounded-full overflow-hidden mb-4 border-2 border-indigo-400">
@@ -65,34 +73,37 @@ export const AboutSection = () => (
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <h3 className="text-xl font-semibold mb-2 text-slate-200">Project Links</h3>
-                    <div className="flex flex-wrap gap-4">
-                        <a
+                    <div className="border-b border-slate-700 mb-4"></div>
+                    <div className="flex-wrap gap-4">
+                        <Link
                             href="https://lablab.ai/event/aistronauts-space-agents-on-a-mission/spacez"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-400 hover:text-indigo-300 flex items-center gap-2"
                         >
                             <span>Project Page</span>
-                        </a>
-                        <a
+                            <ExternalLinkIcon className="w-4 h-4" />
+                        </Link>
+                        <Link
                             href="https://github.com/pritisolanki/spacez_crew"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-400 hover:text-indigo-300 flex items-center gap-2"
                         >
                             <span>Backend Repository (Crew AI)</span>
-                        </a>
-                        <a
+                            <ExternalLinkIcon className="w-4 h-4" />
+                        </Link>
+                        <Link
                             href="https://github.com/kumarvishalben/galact-iq"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-400 hover:text-indigo-300 flex items-center gap-2"
                         >
                             <span>Frontend Repository (Next.js)</span>
-                        </a>
+                            <ExternalLinkIcon className="w-4 h-4" />
+                        </Link>
                     </div>
                 </div>
             </div>
