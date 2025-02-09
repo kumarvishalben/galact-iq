@@ -6,7 +6,8 @@ import Footer from "@/components/Footer"
 import Header from "@/components/Header"
 import ReactMarkdown from "react-markdown"
 
-
+// Add this constant at the top level, after imports
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 function HeaderIntro() {
   return (
@@ -96,7 +97,7 @@ function ChatSection() {
       setMessages([...messages, { type: "user", content: input }])
 
       try {
-        const response = await fetch('http://localhost:8000/run-crew', {
+        const response = await fetch(`${API_URL}/run-crew`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
